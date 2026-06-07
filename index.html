@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GoaBats – Premium Cricket Bat Brands from Goa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    /* ============================================================
+       CSS VARIABLES & RESET
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0a0a0a;
+      --surface:   #111111;
+      --card:      #181818;
+      --border:    #2a2a2a;
+      --gold:      #c9a84c;
+      --gold-lt:   #e8c76a;
+      --white:     #f5f0e8;
+      --muted:     #888;
+      --wa-green:  #25D366;
+      --font-disp: 'Bebas Neue', sans-serif;
+      --font-body: 'Outfit', sans-serif;
+      --radius:    12px;
+      --transition: 0.35s cubic-bezier(.4,0,.2,1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-weight: 400;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    /* ============================================================
+       NOISE TEXTURE OVERLAY
+    ============================================================ */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: .6;
+    }
+
+    /* ============================================================
+       NAVBAR
+    ============================================================ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5vw;
+      height: 70px;
+      background: rgba(10,10,10,.85);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: var(--font-disp);
+      font-size: 1.8rem;
+      letter-spacing: 2px;
+      color: var(--gold);
+      display: flex; align-items: center; gap: 10px;
+    }
+
+    .nav-logo span { color: var(--white); }
+
+    .nav-tagline {
+      font-size: .72rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .nav-right {
+      display: flex; align-items: center; gap: 24px;
+    }
+
+    .nav-link {
+      font-size: .85rem; letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--muted);
+      transition: color var(--transition);
+    }
+    .nav-link:hover { color: var(--gold); }
+
+    /* ============================================================
+       HERO SECTION
+    ============================================================ */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 100px 5vw 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Animated diagonal gradient background */
+    .hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,168,76,.12) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(201,168,76,.07) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* Grid lines */
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(201,168,76,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,168,76,.05) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-size: .7rem;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeUp .8s ease .2s forwards;
+    }
+
+    .hero-title {
+      font-family: var(--font-disp);
+      font-size: clamp(4rem, 12vw, 9rem);
+      line-height: .95;
+      letter-spacing: 2px;
+      color: var(--white);
+      opacity: 0;
+      animation: fadeUp .9s ease .4s forwards;
+    }
+
+    .hero-title em {
+      font-style: normal;
+      -webkit-text-stroke: 1px var(--gold);
+      color: transparent;
+    }
+
+    .hero-sub {
+      font-size: clamp(.95rem, 1.8vw, 1.15rem);
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.7;
+      margin: 28px auto 0;
+      font-weight: 300;
+      opacity: 0;
+      animation: fadeUp 1s ease .6s forwards;
+    }
+
+    .hero-scroll {
+      margin-top: 60px;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      opacity: 0;
+      animation: fadeUp 1s ease 1s forwards;
+    }
+
+    .hero-scroll span {
+      font-size: .65rem; letter-spacing: 4px; text-transform: uppercase; color: var(--muted);
+    }
+
+    .scroll-line {
+      width: 1px; height: 50px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: scrollPulse 2s ease infinite;
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 1; transform: scaleY(1); }
+      50% { opacity: .4; transform: scaleY(.6); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============================================================
+       SECTION HEADER
+    ============================================================ */
+    .section-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .section-eyebrow {
+      font-size: .68rem; letter-spacing: 5px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-family: var(--font-disp);
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      letter-spacing: 2px;
+      line-height: 1;
+    }
+
+    .section-title em {
+      font-style: normal; color: var(--gold);
+    }
+
+    /* ============================================================
+       BRANDS SECTION
+    ============================================================ */
+    .brands-section {
+      padding: 100px 5vw 120px;
+      position: relative;
+    }
+
+    /* ---- BRAND CARDS GRID ---- */
+    .brands-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* ============================================================
+       BRAND CARD
+       To ADD a new brand:
+       1. Duplicate the <article class="brand-card"> block below
+       2. Update data-brand, href, logo SVG, name, tagline, origin, colours
+       3. The grid auto-expands – you may also switch to repeat(auto-fit, minmax(320px,1fr))
+    ============================================================ */
+    .brand-card {
+      position: relative;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+      animation: fadeUp .8s ease both;
+    }
+
+    .brand-card:nth-child(1) { animation-delay: .1s; }
+    .brand-card:nth-child(2) { animation-delay: .25s; }
+    .brand-card:nth-child(3) { animation-delay: .4s; }
+
+    .brand-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--gold);
+      box-shadow: 0 24px 60px rgba(201,168,76,.18);
+    }
+
+    /* Glow sweep on hover */
+    .brand-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(201,168,76,.08) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity var(--transition);
+      pointer-events: none;
+    }
+    .brand-card:hover::before { opacity: 1; }
+
+    /* Accent bar at top */
+    .brand-card-accent {
+      height: 3px;
+      width: 100%;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform var(--transition);
+    }
+    .brand-card:hover .brand-card-accent { transform: scaleX(1); }
+
+    .brand-card-inner {
+      padding: 48px 36px 40px;
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center; gap: 0;
+    }
+
+    /* ---- Logo container ---- */
+    .brand-logo-wrap {
+      width: 130px; height: 130px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 32px;
+      position: relative;
+      transition: transform var(--transition);
+    }
+    .brand-card:hover .brand-logo-wrap { transform: scale(1.06); }
+
+    /* Ring pulse on hover */
+    .brand-logo-wrap::after {
+      content: '';
+      position: absolute; inset: -6px;
+      border-radius: 50%;
+      border: 1px dashed var(--gold);
+      opacity: 0;
+      transform: scale(.9);
+      transition: opacity var(--transition), transform var(--transition);
+    }
+    .brand-card:hover .brand-logo-wrap::after { opacity: .6; transform: scale(1); }
+
+    .brand-logo-wrap img,
+    .brand-logo-wrap svg { width: 80px; height: 80px; object-fit: contain; }
+
+    .brand-name {
+      font-family: var(--font-disp);
+      font-size: 2.2rem;
+      letter-spacing: 3px;
+      color: var(--white);
+      margin-bottom: 8px;
+      line-height: 1;
+    }
+
+    .brand-tagline {
+      font-size: .8rem; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 14px;
+    }
+
+    .brand-origin {
+      font-size: .78rem; color: var(--muted); margin-bottom: 28px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .brand-origin::before { content: '📍'; font-size: .85rem; }
+
+    /* Stats row */
+    .brand-stats {
+      display: flex; gap: 24px;
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+      width: 100%;
+      justify-content: center;
+      margin-bottom: 32px;
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      font-family: var(--font-disp);
+      font-size: 1.6rem; color: var(--gold); letter-spacing: 1px;
+    }
+    .stat-lbl { font-size: .62rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+
+    .brand-cta {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 13px 32px;
+      background: transparent;
+      border: 1px solid var(--gold);
+      border-radius: 4px;
+      font-family: var(--font-body);
+      font-size: .8rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition);
+    }
+    .brand-card:hover .brand-cta {
+      background: var(--gold);
+      color: #000;
+    }
+
+    .brand-cta svg { transition: transform var(--transition); }
+    .brand-card:hover .brand-cta svg { transform: translateX(4px); }
+
+    /* ============================================================
+       WHY GOA STRIP
+    ============================================================ */
+    .why-strip {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 5vw;
+    }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 40px;
+      max-width: 1100px; margin: 0 auto;
+    }
+
+    .why-item { text-align: center; }
+    .why-icon {
+      font-size: 2.2rem; margin-bottom: 16px;
+      display: block;
+    }
+    .why-item h4 {
+      font-family: var(--font-disp); font-size: 1.15rem; letter-spacing: 2px;
+      color: var(--gold); margin-bottom: 8px;
+    }
+    .why-item p { font-size: .8rem; color: var(--muted); line-height: 1.7; }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer {
+      padding: 60px 5vw 30px;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-logo {
+      font-family: var(--font-disp);
+      font-size: 2.5rem;
+      letter-spacing: 3px;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    .footer-logo span { color: var(--white); }
+
+    footer p {
+      font-size: .75rem; color: var(--muted); letter-spacing: 1px;
+      margin-top: 8px;
+    }
+
+    .footer-divider {
+      width: 60px; height: 1px; background: var(--border);
+      margin: 28px auto;
+    }
+
+    .footer-copy {
+      font-size: .7rem; color: #444; letter-spacing: 1px;
+    }
+
+    /* ============================================================
+       WHATSAPP FLOATING BUTTON (global)
+    ============================================================ */
+    .wa-float {
+      position: fixed;
+      bottom: 28px; right: 28px; z-index: 200;
+      display: flex; align-items: center; gap: 10px;
+      background: var(--wa-green);
+      color: #fff;
+      padding: 14px 22px;
+      border-radius: 50px;
+      font-size: .85rem; font-weight: 600; letter-spacing: .5px;
+      box-shadow: 0 8px 30px rgba(37,211,102,.35);
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .wa-float:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(37,211,102,.5);
+    }
+    .wa-float svg { width: 22px; height: 22px; }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 900px) {
+      .brands-grid { grid-template-columns: 1fr 1fr; }
+      .why-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .brands-grid { grid-template-columns: 1fr; }
+      .why-grid { grid-template-columns: 1fr 1fr; }
+      .nav-tagline { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+     NAVIGATION
+============================================================ -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    GOA<span>BATS</span>
+    <div style="display:flex;flex-direction:column">
+      <span class="nav-tagline">Premium Cricket Bats · Goa</span>
+    </div>
+  </a>
+  <div class="nav-right">
+    <a class="nav-link" href="#brands">Brands</a>
+    <a class="nav-link" href="#about">About</a>
+    <!-- Add more nav links here -->
+  </div>
+</nav>
+
+<!-- ============================================================
+     HERO
+============================================================ -->
+<section class="hero">
+  <p class="hero-eyebrow">Handcrafted · Goa · Est. 2024</p>
+  <h1 class="hero-title">PLAY<br/>LIKE A <em>LEGEND</em></h1>
+  <p class="hero-sub">
+    Discover Goa's finest cricket bat brands — built for serious players,
+    designed to dominate. Select your brand below to explore the full range.
+  </p>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>Explore Brands</span>
+  </div>
+</section>
+
+<!-- ============================================================
+     BRANDS SECTION
+     ──────────────────────────────────────────────────────────
+     HOW TO ADD A NEW BRAND:
+     1. Copy an <article class="brand-card"> block
+     2. Update the href="brand-X.html" to match a new brand page
+     3. Change the logo SVG / logo <img> tag
+     4. Update name, tagline, origin, stats
+     5. Add the new brand page (copy brand-template.html)
+     The grid switches to 2-col at tablet, 1-col on mobile automatically.
+     To show 4 brands in a row, change grid-template-columns to repeat(4,1fr)
+     in .brands-grid inside this file's CSS.
+============================================================ -->
+<section class="brands-section" id="brands">
+  <div class="section-header">
+    <p class="section-eyebrow">Our Exclusive Brands</p>
+    <h2 class="section-title">CHOOSE YOUR <em>BRAND</em></h2>
+  </div>
+
+  <div class="brands-grid">
+
+    <!-- ======================================================
+         BRAND 1 — SUNCOAST WILLOW
+         Replace logo SVG with <img src="logos/brand1.png" …>
+         Update href to matching brand page
+    ====================================================== -->
+    <article class="brand-card" onclick="location.href='brand-suncoast.html'">
+      <div class="brand-card-accent"></div>
+      <div class="brand-card-inner">
+
+        <div class="brand-logo-wrap" style="background:rgba(201,168,76,.1);">
+          <!-- REPLACE THIS SVG with your actual brand logo image:
+               <img src="logos/suncoast-logo.png" alt="Suncoast Willow Logo" />
+          -->
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="40" cy="40" r="38" stroke="#c9a84c" stroke-width="1.5"/>
+            <path d="M40 14 L44 28 L58 28 L47 36 L51 50 L40 42 L29 50 L33 36 L22 28 L36 28 Z"
+                  fill="#c9a84c" opacity=".85"/>
+            <text x="40" y="70" text-anchor="middle" font-size="7"
+                  fill="#c9a84c" font-family="Bebas Neue,sans-serif" letter-spacing="2">WILLOW</text>
+          </svg>
+        </div>
+
+        <h3 class="brand-name">SUNCOAST</h3>
+        <p class="brand-tagline">Willow · Power · Precision</p>
+        <p class="brand-origin">Panaji, Goa</p>
+
+        <div class="brand-stats">
+          <!-- Update these numbers to real data -->
+          <div class="stat"><div class="stat-num">12+</div><div class="stat-lbl">Models</div></div>
+          <div class="stat"><div class="stat-num">EW</div><div class="stat-lbl">Grade</div></div>
+          <div class="stat"><div class="stat-num">5★</div><div class="stat-lbl">Rating</div></div>
+        </div>
+
+        <span class="brand-cta">
+          Explore Range
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+            <path d="M4 10h12M12 6l4 4-4 4"/>
+          </svg>
+        </span>
+
+      </div>
+    </article>
+    <!-- END BRAND 1 -->
+
+    <!-- ======================================================
+         BRAND 2 — COASTAL KINGS
+         Replace logo SVG with <img src="logos/brand2.png" …>
+    ====================================================== -->
+    <article class="brand-card" onclick="location.href='brand-coastal.html'">
+      <div class="brand-card-accent"></div>
+      <div class="brand-card-inner">
+
+        <div class="brand-logo-wrap" style="background:rgba(100,180,255,.08);">
+          <!-- REPLACE THIS SVG with your actual brand logo image -->
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="2" width="76" height="76" rx="8" stroke="#64b4ff" stroke-width="1.5"/>
+            <path d="M20 60 Q40 20 60 60" stroke="#64b4ff" stroke-width="2" fill="none"/>
+            <path d="M30 60 Q40 35 50 60" stroke="#64b4ff" stroke-width="1" fill="rgba(100,180,255,.2)"/>
+            <circle cx="40" cy="18" r="5" fill="#64b4ff" opacity=".7"/>
+            <text x="40" y="76" text-anchor="middle" font-size="6.5"
+                  fill="#64b4ff" font-family="Bebas Neue,sans-serif" letter-spacing="2">KINGS</text>
+          </svg>
+        </div>
+
+        <h3 class="brand-name" style="color:#a8d8ff;">COASTAL</h3>
+        <p class="brand-tagline" style="color:#64b4ff;">Speed · Style · Strike</p>
+        <p class="brand-origin">Margao, Goa</p>
+
+        <div class="brand-stats">
+          <div class="stat"><div class="stat-num" style="color:#64b4ff;">8+</div><div class="stat-lbl">Models</div></div>
+          <div class="stat"><div class="stat-num" style="color:#64b4ff;">G1</div><div class="stat-lbl">Grade</div></div>
+          <div class="stat"><div class="stat-num" style="color:#64b4ff;">5★</div><div class="stat-lbl">Rating</div></div>
+        </div>
+
+        <span class="brand-cta" style="border-color:#64b4ff;color:#64b4ff;">
+          Explore Range
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+            <path d="M4 10h12M12 6l4 4-4 4"/>
+          </svg>
+        </span>
+
+      </div>
+    </article>
+    <!-- END BRAND 2 -->
+
+    <!-- ======================================================
+         BRAND 3 — KONKAN STRIKE
+         Replace logo SVG with <img src="logos/brand3.png" …>
+    ====================================================== -->
+    <article class="brand-card" onclick="location.href='brand-konkan.html'">
+      <div class="brand-card-accent" style="background:#e8553e;"></div>
+      <div class="brand-card-inner">
+
+        <div class="brand-logo-wrap" style="background:rgba(232,85,62,.1);">
+          <!-- REPLACE THIS SVG with your actual brand logo image -->
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="40,4 76,20 76,60 40,76 4,60 4,20"
+                     stroke="#e8553e" stroke-width="1.5" fill="none"/>
+            <path d="M28 24 L44 40 L28 56 M44 40 L56 40"
+                  stroke="#e8553e" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <text x="40" y="72" text-anchor="middle" font-size="5.5"
+                  fill="#e8553e" font-family="Bebas Neue,sans-serif" letter-spacing="1.5">STRIKE</text>
+          </svg>
+        </div>
+
+        <h3 class="brand-name" style="color:#ffb3a4;">KONKAN</h3>
+        <p class="brand-tagline" style="color:#e8553e;">Heritage · Craft · Glory</p>
+        <p class="brand-origin">Vasco da Gama, Goa</p>
+
+        <div class="brand-stats">
+          <div class="stat"><div class="stat-num" style="color:#e8553e;">15+</div><div class="stat-lbl">Models</div></div>
+          <div class="stat"><div class="stat-num" style="color:#e8553e;">EW</div><div class="stat-lbl">Grade</div></div>
+          <div class="stat"><div class="stat-num" style="color:#e8553e;">5★</div><div class="stat-lbl">Rating</div></div>
+        </div>
+
+        <span class="brand-cta" style="border-color:#e8553e;color:#e8553e;">
+          Explore Range
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+            <path d="M4 10h12M12 6l4 4-4 4"/>
+          </svg>
+        </span>
+
+      </div>
+    </article>
+    <!-- END BRAND 3 -->
+
+    <!-- ======================================================
+         ADD MORE BRANDS HERE — just copy any brand-card block above
+    ====================================================== -->
+
+  </div><!-- .brands-grid -->
+</section>
+
+<!-- ============================================================
+     WHY GOA STRIP
+============================================================ -->
+<section class="why-strip" id="about">
+  <div class="section-header">
+    <p class="section-eyebrow">Why Choose Us</p>
+    <h2 class="section-title">GOA'S <em>FINEST</em></h2>
+  </div>
+  <div class="why-grid">
+    <div class="why-item">
+      <span class="why-icon">🌴</span>
+      <h4>Local Craftsmanship</h4>
+      <p>Every bat is handcrafted by seasoned artisans right here in Goa.</p>
+    </div>
+    <div class="why-item">
+      <span class="why-icon">🏏</span>
+      <h4>Premium Willow</h4>
+      <p>Grade 1 and English Willow sourced from the finest suppliers.</p>
+    </div>
+    <div class="why-item">
+      <span class="why-icon">⚡</span>
+      <h4>Quick Delivery</h4>
+      <p>Fast dispatch across Goa and all-India shipping available.</p>
+    </div>
+    <div class="why-item">
+      <span class="why-icon">💬</span>
+      <h4>WhatsApp Orders</h4>
+      <p>Direct ordering via WhatsApp — fast, simple, no middlemen.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer>
+  <div class="footer-logo">GOA<span>BATS</span></div>
+  <p>Premium Cricket Bats · Handcrafted in Goa, India</p>
+  <div class="footer-divider"></div>
+  <p class="footer-copy">© 2024 GoaBats. All rights reserved. · Goa, India</p>
+</footer>
+
+<!-- ============================================================
+     GLOBAL WHATSAPP FLOATING BUTTON
+     Update the href number for general enquiries
+     Format: https://wa.me/91XXXXXXXXXX?text=...
+============================================================ -->
+<a class="wa-float"
+   href="https://wa.me/919000000000?text=Hi%2C%20I%20want%20to%20enquire%20about%20cricket%20bats%20from%20GoaBats!"
+   target="_blank" rel="noopener">
+  <!-- WhatsApp SVG Icon -->
+  <svg viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <path d="M16 2.667C8.636 2.667 2.667 8.636 2.667 16c0 2.353.627 4.56 1.72 6.467L2.667 29.333l7.053-1.693A13.267 13.267 0 0016 29.333c7.364 0 13.333-5.97 13.333-13.333S23.364 2.667 16 2.667zm0 24c-2.003 0-3.88-.533-5.507-1.467l-.393-.24-4.18 1.007 1.04-4.04-.267-.413A10.627 10.627 0 015.333 16C5.333 10.12 10.12 5.333 16 5.333S26.667 10.12 26.667 16 21.88 26.667 16 26.667zm5.827-7.96c-.32-.16-1.893-.933-2.187-1.04-.293-.107-.507-.16-.72.16-.213.32-.827 1.04-.013 1.253.267.107 1.787.72 2.88 1.467.4.267.827.267 1.12-.08.293-.347.88-.88 1.04-1.147.16-.267.053-.48-.107-.64l-.013-.013zM16 5.333zm0 0"/>
+  </svg>
+  General Enquiry
+</a>
+
+</body>
+</html>
