@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Sitemap:
+https://mortifer09.github.io/Tennis-bat-store-Goa/sitemap.xml
